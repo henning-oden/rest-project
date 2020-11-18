@@ -1,0 +1,31 @@
+{
+  "name": "rest-project",
+  "version": "1.0.0",
+  "description": "REST API project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/henning-oden/rest-project.git"
+  },
+  "keywords": [
+    "REST",
+    "API",
+    "practice",
+    "NodeJS"
+  ],
+  "author": "Henning Odén",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/henning-oden/rest-project/issues"
+  },
+  "homepage": "https://github.com/henning-oden/rest-project#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
