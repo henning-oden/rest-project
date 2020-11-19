@@ -1,5 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+const DATABASE_URI = require('./util/database');
 
 const feedRoutes = require('./routes/feed');
 
@@ -23,4 +26,11 @@ app.use((req, res, next) => {
 
 app.use('/feed', feedRoutes); // application/json
 
-app.listen(8080);
+mongoose
+  .connect(DATABASE_URI)
+  .then((result) => {
+    app.listen(8080);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
