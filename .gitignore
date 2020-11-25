@@ -104,3 +104,4 @@ dist
 .tern-port
 images
 util/database.js
+util/jws.js
