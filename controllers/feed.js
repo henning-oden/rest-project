@@ -13,9 +13,10 @@ exports.getPosts = async (req, res, next) => {
   try {
     const count = await Post.find().countDocuments();
     totalItems = count;
-    const posts = await Post.find()
+    const posts = await Post.find().populate('creator')
       .skip((currentPage - 1) * perPage)
       .limit(perPage);
+      console.log(posts);
     res.status(200).json({
       message: 'Fetched posts successfully.',
       posts: posts,
@@ -46,7 +47,6 @@ exports.createPost = async (req, res, next) => {
   const imageUrl = req.file.path.replace('\\', '/');
   const title = req.body.title;
   const content = req.body.content;
-  let creator;
   const post = new Post({
     title: title,
     content: content,
@@ -56,13 +56,12 @@ exports.createPost = async (req, res, next) => {
   try {
     await post.save();
     const user = await User.findById(req.userId);
-    creator = user;
     user.posts.push(post);
     await user.save();
     res.status(201).json({
       message: 'Post created successfully!',
       post: post,
-      creator: { _id: creator._id, name: creator.name },
+      creator: { _id: user._id, name: user.name },
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -76,7 +75,7 @@ exports.createPost = async (req, res, next) => {
 exports.getPost = async (req, res, next) => {
   const postId = req.params.postId;
   try {
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate('creator');
     if (!post) {
       const error = newError('Could not find post.');
       error.statusCode = 404;
@@ -143,7 +142,7 @@ exports.updatePost = async (req, res, next) => {
 exports.deletePost = async (req, res, next) => {
   const postId = req.params.postId;
   try {
-    const post = Post.findById(postId);
+    const post = await Post.findById(postId);
     if (!post) {
       const error = newError('Could not find post.');
       error.statusCode = 404;
