@@ -14,7 +14,9 @@ exports.getPosts = async (req, res, next) => {
   try {
     const count = await Post.find().countDocuments();
     totalItems = count;
-    const posts = await Post.find().populate('creator')
+    const posts = await Post.find()
+      .populate('creator')
+      .sort({ createdAt: -1 })
       .skip((currentPage - 1) * perPage)
       .limit(perPage);
     res.status(200).json({
@@ -131,7 +133,7 @@ exports.updatePost = async (req, res, next) => {
     post.imageUrl = imageUrl;
     post.content = content;
     await post.save();
-    io.getIO().emit('posts', { action: 'update', post: post});
+    io.getIO().emit('posts', { action: 'update', post: post });
     res.status(200).json({ message: 'Post updated!', post: post });
   } catch (err) {
     if (!err.statusCode) {
