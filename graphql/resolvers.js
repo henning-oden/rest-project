@@ -13,8 +13,10 @@ module.exports = {
     if (validator.isEmpty(userInput.password) || !validator.isLength(userInput.password, {min: 5})) {
       errors.push({message: 'Password too short!'});
     }
-    if (error.length > 0) {
+    if (errors.length > 0) {
       const error = new Error('Invalid input.');
+      error.data = errors;
+      error.code = 422;
       throw error;
     }
     const existingUser = await User.findOne({ email: userInput.email });
