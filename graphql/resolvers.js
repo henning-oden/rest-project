@@ -31,6 +31,6 @@ module.exports = {
       password: hashedPw,
     });
     const createdUser = await user.save();
-    return { ...createdUser.doc, _id: createdUser._id.toString() };
+    return { ...createdUser._doc, _id: createdUser._id.toString() };
   },
 };
