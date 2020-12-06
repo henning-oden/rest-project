@@ -109,7 +109,7 @@ module.exports = {
       updatedAt: createdPost.updatedAt.toISOString(),
     };
   },
-  posts: async function ({page}, req) {
+  posts: async function ({ page }, req) {
     if (!req.isAuth) {
       const error = new Error('Not authenticated!');
       error.code = 401;
@@ -125,7 +125,7 @@ module.exports = {
       .skip((page - 1) * perPage)
       .limit(perPage)
       .populate('creator');
-    const mappedPosts = posts.map(p => {
+    const mappedPosts = posts.map((p) => {
       return {
         ...p._doc,
         _id: p._id.toString(),
@@ -136,6 +136,25 @@ module.exports = {
     return {
       posts: mappedPosts,
       totalPosts: totalPosts,
+    };
+  },
+  post: async function ({ postId }, req) {
+    if (!req.isAuth) {
+      const error = new Error('Not authenticated!');
+      error.code = 401;
+      throw error;
+    }
+    const post = await Post.findById(postId).populate('creator');
+    if (!post) {
+      const error = new Error('Post not found.');
+      error.code = 404;
+      throw error;
+    }
+    return {
+      ...post._doc,
+      _id: post._id.toString(),
+      createdAt: post.createdAt.toISOString(),
+      updatedAt: post.updatedAt.toISOString(),
     };
   },
 };
