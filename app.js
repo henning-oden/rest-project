@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const graphqlHttp = require('express-graphql');
-const fs = require('fs');
+const { clearImage } = require('./util/file');
 
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
@@ -109,9 +109,3 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
-  const clearImage = (filePath) => {
-    filePath = path.join(__dirname, '..', filePath);
-    fs.unlink(filePath, (err) => console.log(err));
-  };
-  
